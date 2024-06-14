@@ -1,0 +1,28 @@
+# Parameters
+nc: 19  # number of classes (e.g., ImageNet has 1000 classes)
+depth_multiple: 0.33  # this is a classification model, depth is usually not scaled
+width_multiple: 0.5  # this is a classification model, width is usually not scaled
+anchors:
+  - [10,13, 16,30, 33,23]  # P3/8
+  - [30,61, 62,45, 59,119]  # P4/16
+  - [116,90, 156,198, 373,326]  # P5/32
+# Model configuration
+backbone:
+  # [module, args]
+  [[-1, 1, Conv, [64, 6, 2, 2]],  # 0-P1/2
+   [-1, 1, Conv, [128, 3, 2]],  # 1-P2/4
+   [-1, 1, C3, [128]],
+   [-1, 1, Conv, [256, 3, 2]],  # 3-P3/8
+   [-1, 1, C3, [256]],
+   [-1, 1, Conv, [512, 3, 2]],  # 5-P4/16
+   [-1, 1, C3, [512]],
+   [-1, 1, Conv, [1024, 3, 2]],  # 7-P5/32
+   [-1, 1, C3, [1024]],  # 9
+  ]
+
+head:
+  # [module, args]
+  [[-1, 1, Classify, [512, 1280, nc]]] # Classification head with 512 input channels, 1280 mid channels, and 1000 output classes (nc)
+
+# Note: Actual module definitions like 'Conv', 'C3', 'Classify' would need to match those used in the Python model code.
+# This is a simplified representation.
